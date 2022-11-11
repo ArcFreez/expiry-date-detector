@@ -1,0 +1,68 @@
+\documentclass[12pt]{article}
+\title{Project Proposal}
+\begin{document} \maketitle
+\textbf{Group Members:} Abhaya Shrestha (\texttt{ashrestha@mines.edu}), and
+Jason Rosenblum (\texttt{jhrosenblum@mines.edu}) \\ \\
+\textbf{Description} \\
+Today, there are often cases where people get ill or die
+due to products that are unsafe to consume. Our project will 
+detect expiry label on products (particulary
+food, and medicine), and determine if it is safe to consume which
+will prevent people from getting ill or dying. \\ \\
+\textbf{Approach} \\
+The approach we plan to take is to use a mixture of techniques from class
+to achieve the most accuracte result:
+\begin{enumerate}
+  \item \textbf{Cleanup step:} first cleanup any distortions
+  using camera calibration techiniques (example: the label
+  could be a rectangle in a cylindrical product, or could be
+  on the side of a jar cap; therefore, this step is absolutely
+  crucial) to map the label onto a rectangular image.
+  \item \textbf{Detection step:} For each unique colors
+  of data we collect (see \textbf{Data} section) that labels are written in do the following.
+  \begin{itemize}
+      \item Use hue, saturation and vue thresholding technique to detect that color,
+      and compute connected components.
+      \item Convert the connected components of that color to black, with a white
+      background using thresholding.
+      \item Use the compiled list of keyboard letter templates written
+      in black to match the letters in the processed image (see \textbf{Data} section).
+      \item See if the template matching spells any of the starting substring
+      collected in data (see \textbf{Data} section). If it does, then that means we have found the
+      substring, and we can use it's geometry to find matched templates to the
+      right of that substring which indicates date.
+  \end{itemize}
+  \item \textbf{Evaulation of step:} If the date label could
+  be detected and date format be understood, output
+  whether or not it is safe to consume. Otherwise, if the steps above for detection could not
+  detect it or if date format could not be understood, output not detected.
+\end{enumerate}
+\textbf{Data} \\
+For our algorithm to work properly, we need to collect data on
+\begin{enumerate}
+    \item The unique color labels for food and medicine. This will be used
+    in our detection step for HSV thresholding technique.
+    \item Limiting the templates to the English keyboard letters, we need to
+    gather the letters written in black for the most common
+    fonts that most food/medicine labels are written in.
+    \item The unique labels substring for expirey labels (example: ``used by'', ``expires by'' etc.)
+    \item A dataset of images of food and medicine labels which contain
+    the label or which do not contain the label (we also need to test true positive,
+    and true negatives). We can gather these from retail stores, or from
+    online pictures that are free to use.
+\end{enumerate}
+\textbf{Timeline}
+\begin{itemize}
+    \item \textbf{November 21st:} finish collecting data, finish research on
+    possible inputs our algorithm (mostly going to be
+    the variety of labels we compile and the unique colors of
+    labels our algorithm needs to detect) needs to process,
+    and start working on implementation.
+    \item \textbf{November 28th:} have presentation finished, and
+    continue working on implementation.
+    \item \textbf{December 9th:} work
+    on optimizing algorithm accuracy.
+    \item \textbf{December 12th:} have code finished, and have paper finished.
+\end{itemize}
+
+\end{document}
