@@ -2,6 +2,9 @@
 import os
 from glob import glob
 import cv2
+import numpy as np
+
+from modules import resize
 
 def main():
     INPUT_IMAGES_DIRECTORY = '../data'
@@ -10,11 +13,12 @@ def main():
     assert(len(image_file_names) > 0)
     images = iter(cv2.imread(file_name) for file_name in image_file_names)
 
-    # for now just using the first images
     for image in images:
-        cv2.imshow('image', image)
+        img_cpy = image.copy()
+        resized = resize(img_cpy)
+        cv2.imshow('result', resized)
         cv2.waitKey(0)
-        break
+
 
 if __name__ == '__main__':
     main()
