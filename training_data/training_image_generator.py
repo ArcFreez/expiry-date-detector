@@ -17,8 +17,9 @@ def main():
             fontScale=1.5, color=(255, 255, 255), thickness=2)
         cv2.imwrite(f'{NUMBERS_DIR}/FONT_HERSHEY_SIMPLEX-{num}.jpg', template)
 
-    food_exp_phrases = ['Best if Used By', 'Best if Used Before', 'Use-By']
-    drug_exp_phrases = ['EXP.', 'EXP', 'EXPIRY', 'EXP DATE', 'Exp. Date']
+    food_exp_phrases = ['Best if Used By', 'BEST IF USED BY',
+         'Best if Used Before', 'BEST IF USED BEFORE', 'Use-By', 'USE-BY']
+    drug_exp_phrases = ['EXP', 'EXPIRY', 'EXP DATE', 'Exp. Date']
     all_phrases = []
     all_phrases.extend(food_exp_phrases)
     all_phrases.extend(drug_exp_phrases)

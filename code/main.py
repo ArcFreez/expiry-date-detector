@@ -69,7 +69,7 @@ def get_training_data():
     def get_images(dir):
         image_file_names = glob(os.path.join(dir, '*.jpg'))
         assert(len(image_file_names) > 0)
-        return iter(cv2.imread(file_name) for file_name in image_file_names)
+        return [cv2.imread(file_name) for file_name in image_file_names]
     return get_images(EXP_PHRASES_DIR), get_images(MONTHS_DIR), get_images(NUMBERS_DIR)
 
 # functions to detect image
@@ -87,6 +87,7 @@ def detect_expiry_date(image, training_imgs):
     )
     # threshold black
     black_labels, white_labels = get_black_and_white_labels(blur)
+    # 2) match the processed image
     cv2.imshow('black labels', black_labels)
     cv2.waitKey(0)
     cv2.imshow('white labels', white_labels)
