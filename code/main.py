@@ -75,7 +75,7 @@ def main():
         image_resized = resize(image.copy())
         # turn it into grayscale
         gray_img = cv2.cvtColor(image_resized, cv2.COLOR_BGR2GRAY)
-        # blur
+        # blur to get rid of background noise
         blur = cv2.GaussianBlur(
             src=gray_img,
             ksize=(0, 0),
