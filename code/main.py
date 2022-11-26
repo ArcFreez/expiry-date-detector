@@ -85,7 +85,7 @@ def detect_expiry_date(image, training_imgs):
         ksize=(0, 0), # sobel
         sigmaX=1
     )
-    # threshold black
+    # threshold black and white
     black_labels, white_labels = get_black_and_white_labels(blur)
     # 2) match the processed image
     cv2.imshow('black labels', black_labels)
