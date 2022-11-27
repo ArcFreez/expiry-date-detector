@@ -7,6 +7,8 @@ def main():
     food_exp_phrases = ['Best if Used By', 'BEST IF USED BY',
          'Best if Used Before', 'BEST IF USED BEFORE', 'Use-By', 'USE-BY']
     drug_exp_phrases = ['EXP', 'EXPIRY', 'EXP DATE', 'Exp. Date']
+    months = ['JAN', 'FEB', 'MAR', 'APR','MAY', 'JUN', 'JUL', 'AUG', 'SEP', 
+        'OCT', 'NOV', 'DEC']
     special_chars = ['/', '-']
     set_ = set()
     log = open('unique_chars.txt', 'w+')
@@ -18,6 +20,8 @@ def main():
         grab_unique_letrs(p, set_)
     for p in special_chars:
         grab_unique_letrs(p, set_)
+    for m in months:
+        grab_unique_letrs(m, set_)
     for item in set_:
         log.write(f'{item}\n')
 
