@@ -51,12 +51,18 @@ def get_black_and_white_labels(gray_img):
         )
     return get_connected_components(thresh_black), get_connected_components(thresh_white)
 
+def grab_file_names(input_dir):
+    all_files = []
+    all_files.extend(glob(os.path.join(input_dir, '*.jpg')))
+    all_files.extend(glob(os.path.join(input_dir, '*.JPG')))
+    return all_files
+
 # functions to get data
 def get_test_data():
     """Get all test data."""
     INPUT_IMAGES_DIRECTORY = '../data'
     assert(os.path.exists(INPUT_IMAGES_DIRECTORY))
-    image_file_names = glob(os.path.join(INPUT_IMAGES_DIRECTORY, '*.jpg'))
+    image_file_names = grab_file_names(INPUT_IMAGES_DIRECTORY)
     assert(len(image_file_names) > 0)
     return iter(cv2.imread(file_name) for file_name in image_file_names)
 
@@ -67,7 +73,7 @@ def get_training_data():
         assert(os.path.exists(dir))
     EXP_PHRASES_DIR, MONTHS_DIR, NUMBERS_DIR = TRAINIG_DATA_DIRS
     def get_images(dir):
-        image_file_names = glob(os.path.join(dir, '*.jpg'))
+        image_file_names = grab_file_names(dir)
         assert(len(image_file_names) > 0)
         return [cv2.imread(file_name) for file_name in image_file_names]
     return get_images(EXP_PHRASES_DIR), get_images(MONTHS_DIR), get_images(NUMBERS_DIR)
@@ -129,11 +135,10 @@ def detect_expiry_date(image, training_imgs):
     # threshold black and white
     black_labels, white_labels = get_black_and_white_labels(blur)
     _, black_labels = cv2.threshold(black_labels,0,255,cv2.THRESH_BINARY)
-    black_labels = cv2.dilate(black_labels, np.ones((1, 1), np.uint8))
     # 2) match the processed image
-    phrases, _, _ = training_imgs
-    for phrase in phrases:
-        match_features(black_labels, phrase)
+    _, months, _ = training_imgs
+    for month in months:
+        match_features(black_labels, month)
 
 def main():
     images = get_test_data()
