@@ -1,0 +1,48 @@
+detecting expiry date for ../data/IMG_5118.jpg
+no matches found for image ../data/IMG_5118.jpg
+detecting expiry date for ../data/IMG_5119.jpg
+no matches found for image ../data/IMG_5119.jpg
+detecting expiry date for ../data/IMG_5120.jpg
+no matches found for image ../data/IMG_5120.jpg
+detecting expiry date for ../data/IMG_5121.jpg
+no matches found for image ../data/IMG_5121.jpg
+detecting expiry date for ../data/IMG_5122.jpg
+no matches found for image ../data/IMG_5122.jpg
+detecting expiry date for ../data/IMG_5123.jpg
+no matches found for image ../data/IMG_5123.jpg
+detecting expiry date for ../data/IMG_5124.jpg
+no matches found for image ../data/IMG_5124.jpg
+detecting expiry date for ../data/IMG_5125.jpg
+no matches found for image ../data/IMG_5125.jpg
+detecting expiry date for ../data/IMG_5126.jpg
+no matches found for image ../data/IMG_5126.jpg
+detecting expiry date for ../data/IMG_5127.jpg
+no matches found for image ../data/IMG_5127.jpg
+detecting expiry date for ../data/IMG_5128.jpg
+no matches found for image ../data/IMG_5128.jpg
+detecting expiry date for ../data/IMG_5129.jpg
+no matches found for image ../data/IMG_5129.jpg
+detecting expiry date for ../data/IMG_5130.jpg
+no matches found for image ../data/IMG_5130.jpg
+detecting expiry date for ../data/IMG_5131.jpg
+no matches found for image ../data/IMG_5131.jpg
+detecting expiry date for ../data/IMG_5132.jpg
+no matches found for image ../data/IMG_5132.jpg
+detecting expiry date for ../data/IMG_5133.jpg
+no matches found for image ../data/IMG_5133.jpg
+detecting expiry date for ../data/IMG_5134.jpg
+no matches found for image ../data/IMG_5134.jpg
+detecting expiry date for ../data/IMG_5135.jpg
+no matches found for image ../data/IMG_5135.jpg
+detecting expiry date for ../data/IMG_5136.jpg
+no matches found for image ../data/IMG_5136.jpg
+detecting expiry date for ../data/IMG_5137.jpg
+no matches found for image ../data/IMG_5137.jpg
+detecting expiry date for ../data/IMG_5138.jpg
+no matches found for image ../data/IMG_5138.jpg
+detecting expiry date for ../data/IMG_5139.jpg
+no matches found for image ../data/IMG_5139.jpg
+detecting expiry date for ../data/IMG_5140.jpg
+no matches found for image ../data/IMG_5140.jpg
+detecting expiry date for ../data/IMG_5141.jpg
+no matches found for image ../data/IMG_5141.jpg
