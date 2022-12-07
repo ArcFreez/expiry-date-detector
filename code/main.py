@@ -58,7 +58,7 @@ def scale_and_match_template(original, image, template, template_name, color_of_
 
 def determine_if_expired(date_str):
     # mocking date for now, but this can be adjusted
-    curr_date = datetime(year=2000, month=22, day=4)
+    curr_date = datetime(year=2024, month=12, day=4)
     month_to_num_table = {'JAN': 1, 'FEB': 2, 'MAR': 3, 'APR': 4, 'MAY': 5,
              'JUN': 6, 'JUL': 7,
             'AUG': 8, 'SEP': 9, 'OCT': 10, 'NOV': 11, 'DEC': 12}
