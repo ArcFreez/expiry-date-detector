@@ -107,35 +107,44 @@ def determine_if_expired(date_str):
         if len(date_str) == 9:
             year, month, day = date_str[0:4], date_str[4:7],\
                 date_str[7:9]
-            date = datetime(year=int(year), month=month_to_num_table[month], day=int(day))
-            if curr_date > date:
-                return PRODUCT_HAS_EXPIRED_MSG
+            if year.isdigit() and day.isdigit() and month in month_to_num_table:
+                date = datetime(year=int(year), month=month_to_num_table[month], day=int(day))
+                if curr_date > date:
+                    return PRODUCT_HAS_EXPIRED_MSG
         return None
     def handle_yyyy_mmm_spaces_fmt():
         if len(date_str) == 7:
             year, month = date_str[0:4], date_str[4:7]
-            date = datetime(year=int(year), month=month_to_num_table[month])
-            if curr_date > date:
-                return PRODUCT_HAS_EXPIRED_MSG
+            if year.isdigit() and month in month_to_num_table:
+                date = datetime(year=int(year), month=month_to_num_table[month])
+                if curr_date > date:
+                    return PRODUCT_HAS_EXPIRED_MSG
         return None
+    def handle_dd_mmm_yyyy_spaces_fmt():
+        if len(date_str) == 9:
+            day, month, year = date_str[0:2], date_str[2:5],\
+                date_str[5:9]
+            if day.isdigit() and year.isdigit() and month in month_to_num_table:
+                date = datetime(year=int(year), month=month_to_num_table[month], day=int(day))
+                if curr_date > date:
+                    return PRODUCT_HAS_EXPIRED_MSG
     # match mm/dd/yyyy, mm-dd-yyyy format
     format_handled = [handle_mm_dd_yyyy_fmt('/'),
         handle_mm_dd_yyyy_fmt('-'), handle_yyyy_mm_fmt('-'),
         handle_yyyy_mmm_dd_fmt('-'),
         handle_yyyy_mmm_fmt('-'),
         handle_yyyy_mmm_dd_spaces_fmt(),
-        handle_yyyy_mmm_spaces_fmt()]
+        handle_yyyy_mmm_spaces_fmt(),
+        handle_dd_mmm_yyyy_spaces_fmt()]
     for msg in format_handled:
         if msg is not None:
             return msg
-    return 'FOOD IS SAFE TO CONSUME.'
+    return 'PRODUCT IS SAFE TO CONSUME.'
 
 
 def match_best_date_format(output_label):
-    # mm/dd/yyyy, mm-dd-yyyy, YYYY-MM, YYYY-MMM-DD, YYYY-MMM
-    # or YYYYMMMDD, YYYYMMM
     date_fmt_regexs_and_matches = [
-        # (pattern, regex, matches)
+        # labels recommended format by FDA for drug labels
         ('mm/dd/yyyy',re.compile(r'\d{2}\\\d{2}\\\d{4}')),
         ('mm-dd-yyyy', re.compile(r'\d{2}\-\d{2}\-\d{4}')),
         ('yyyy-mm', re.compile(r'\d{4}\-\d{2}'), []),
@@ -186,7 +195,20 @@ def match_best_date_format(output_label):
         \d{4}SEP|
         \d{4}OCT|
         \d{4}NOV|
-        \d{4}DEC"""))
+        \d{4}DEC""")),
+        # observed regexs from food labels
+        ('dd mmm yyyy', re.compile(r"""\d{2}JAN\d{4}|
+        \d{2}FEB\d{4}|
+        \d{2}MAR\d{4}|
+        \d{2}APR\d{4}|
+        \d{2}MAY\d{4}|
+        \d{2}JUN\d{4}|
+        \d{2}JUL\d{4}|
+        \d{2}AUG\d{4}|
+        \d{2}SEP\d{4}|
+        \d{2}OCT\d{4}|
+        \d{2}NOV\d{4}|
+        \d{2}DEC\d{4}"""))
     ]
     date_matches = []
     for item in date_fmt_regexs_and_matches:
@@ -275,6 +297,7 @@ def detect_expiry_date(image, image_name, log_file, templates_to_match):
     cv2.waitKey(0)
     # 2) based off of scores in the black and white labels, find
     # which one has a better correlation based off of average correlation
+    print('MATCHING TEMPLATES...')
     max_score_and_locs_black_labels = get_template_match_scores_and_locs(image_resized, black_labels, templates_to_match, 'black')
     max_score_and_locs_white_labels = get_template_match_scores_and_locs(image_resized, white_labels, templates_to_match, 'white')
     print('DONE MATCHING TEMPLATES')
@@ -286,9 +309,10 @@ def detect_expiry_date(image, image_name, log_file, templates_to_match):
     # 3) figure out what date the templates spell out based off of sorting points in
     # the image.
     output_label_black = ''.join(get_label(item) for item in max_score_and_locs_black_labels)
-    ouput_label_white = ''.join(get_label(item) for item in max_score_and_locs_white_labels)
+    print(output_label_black)
+    output_label_white = ''.join(get_label(item) for item in max_score_and_locs_white_labels)
     date_format_matches_black_label = match_best_date_format(output_label_black)
-    date_format_matches_white_label = match_best_date_format(ouput_label_white)
+    date_format_matches_white_label = match_best_date_format(output_label_white)
     if len(date_format_matches_black_label) == 1:
         print('labels are in black')
         log_file.write('labels are in black.\n')
@@ -344,7 +368,7 @@ def main():
     # get test data
     TEST_DATA_IMAGE_DIR, TRAINING_DATA_IMAGE_DIR = '../data', '../training_data/dot-mat-sq-chars-inv'
     assert(os.path.exists(TEST_DATA_IMAGE_DIR))
-    image_file_names = glob(os.path.join(TEST_DATA_IMAGE_DIR, '*.jpg'))
+    image_file_names = ['../data/IMG_5128.jpg']
     assert(len(image_file_names) > 0)
     image_file_names.sort()
     # training data image directory
