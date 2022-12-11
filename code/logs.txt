@@ -1,2 +1,0 @@
-detecting expiry date for ../data/IMG_5128.jpg
-no matches found for image ../data/IMG_5128.jpg

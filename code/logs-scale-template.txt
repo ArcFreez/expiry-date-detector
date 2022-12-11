@@ -1,0 +1,5 @@
+detecting expiry date for ../data/IMG_5118.jpg
+Ouput black label based off of matches : /2S98YV30657G-FFFCTDDPEUJ1LMBN
+Ouput white label based off of matches : /2D-30O6866MV4AAYESF57TNNPC1LL
+no matches found for image ../data/IMG_5118.jpg
+detecting expiry date for ../data/IMG_5119.jpg
