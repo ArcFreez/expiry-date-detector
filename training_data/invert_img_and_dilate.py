@@ -18,7 +18,7 @@ def resize(image):
 
 def main():
     dir = "./dot-mat-sq-chars"
-    w_dir = "./dot-mat-sq-chars-inv-cc"
+    w_dir = "./dot-mat-sq-chars-inv"
     assert(os.path.exists(dir))
     assert(os.path.exists(w_dir))
     img_file_names = glob(os.path.join(dir, '*.jpg'))

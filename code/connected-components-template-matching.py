@@ -390,7 +390,7 @@ def detect_expiry_date(image, image_name, log_file, templates_to_match):
         output_date_formt_matches(date_format_matches_black_label)
 
 def get_templates():
-    CHARS_TO_MATCH_DIR = "../training_data/dot-mat-sq-chars-inv-cc"
+    CHARS_TO_MATCH_DIR = "../training_data/dot-mat-sq-chars-inv"
     assert(os.path.exists(CHARS_TO_MATCH_DIR))
     def get_character(fname: str) -> str:
         last_split = fname.split('-')[-1]
