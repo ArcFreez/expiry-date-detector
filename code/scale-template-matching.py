@@ -181,6 +181,7 @@ def match_best_date_format(output_label):
         \d{4}\-OCT|
         \d{4}\-NOV|
         \d{4}\-DEC""")),
+        # observed
         ('yyyy mmm dd', re.compile(r"""\d{4}JAN\d{2}|
         \d{4}FEB\d{2}|
         \d{4}MAR\d{2}|
@@ -205,7 +206,6 @@ def match_best_date_format(output_label):
         \d{4}OCT|
         \d{4}NOV|
         \d{4}DEC""")),
-        # observed regexs from food labels
         ('dd mmm yyyy', re.compile(r"""\d{2}JAN\d{4}|
         \d{2}FEB\d{4}|
         \d{2}MAR\d{4}|
