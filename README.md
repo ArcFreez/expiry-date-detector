@@ -21,5 +21,4 @@ for template matching, and code used to generate them from
 3. It will produce outputs and images which
 you will have to hit `enter` your way through to
 finish running. But overall,
-the output will be in the log files (logs-scale-template.txt for scale-template-matching.py),
-and (logs-scale-ccs.txt for connected-components-template-matching.py).
+the output will be in the log files.
