@@ -19,7 +19,7 @@ def resize(image, MAX_WIDTH=1000, MAX_HEIGHT=1000):
         fy=get_resized_dim(img_h, MAX_HEIGHT))
 
 def determine_if_expired(date_str):
-    curr_date = datetime.now()
+    curr_date = datetime(year=2024, month=12, day=1)
     month_to_num_table = {'JAN': 1, 'FEB': 2, 'MAR': 3, 'APR': 4, 'MAY': 5,
              'JUN': 6, 'JUL': 7,
             'AUG': 8, 'SEP': 9, 'OCT': 10, 'NOV': 11, 'DEC': 12}
