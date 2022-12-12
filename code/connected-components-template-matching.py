@@ -19,8 +19,7 @@ def resize(image, MAX_WIDTH=1000, MAX_HEIGHT=1000):
         fy=get_resized_dim(img_h, MAX_HEIGHT))
 
 def determine_if_expired(date_str):
-    # mocking date for now, but this can be adjusted
-    curr_date = datetime(year=2024, month=12, day=4)
+    curr_date = datetime.now()
     month_to_num_table = {'JAN': 1, 'FEB': 2, 'MAR': 3, 'APR': 4, 'MAY': 5,
              'JUN': 6, 'JUL': 7,
             'AUG': 8, 'SEP': 9, 'OCT': 10, 'NOV': 11, 'DEC': 12}
@@ -343,6 +342,10 @@ def detect_expiry_date(image, image_name, log_file, templates_to_match):
     log_file.write(f'detecting expiry date for {image_name}\n')
     # 1)process the image so that it is possible to detect
     _, black_labels, white_labels = get_black_and_white_labels(image)
+    cv2.imshow('black labels image', black_labels)
+    cv2.waitKey(0)
+    cv2.imshow('white labels image', white_labels)
+    cv2.waitKey(0)
     print('MATCHING TEMPLATES...')
     # 2) the expiry date labels can be either in black or white,
     # so process them both
