@@ -18,12 +18,22 @@ def resize(image, MAX_WIDTH=1000, MAX_HEIGHT=1000):
     return cv2.resize(image, dsize=dim, fx=get_resized_dim(img_w, MAX_WIDTH),
         fy=get_resized_dim(img_h, MAX_HEIGHT))
 
+def with_parse_err_handler(parser):
+    def wrapper(*args,**kwargs):
+        try:
+            return parser(*args,**kwargs)
+        except ValueError as e:
+            print(e)
+        return None
+    return wrapper
+
 def determine_if_expired(date_str):
     curr_date = datetime(year=2024, month=12, day=1)
     month_to_num_table = {'JAN': 1, 'FEB': 2, 'MAR': 3, 'APR': 4, 'MAY': 5,
              'JUN': 6, 'JUL': 7,
             'AUG': 8, 'SEP': 9, 'OCT': 10, 'NOV': 11, 'DEC': 12}
     PRODUCT_HAS_EXPIRED_MSG = 'CAUTION: PRODUCT HAS EXPIRED'
+    @with_parse_err_handler
     def handle_mm_dd_yyyy_fmt(delimeter):
         split = date_str.split(delimeter)
         if len(split) == 3:
@@ -34,6 +44,8 @@ def determine_if_expired(date_str):
                 if curr_date > date:
                     return PRODUCT_HAS_EXPIRED_MSG
         return None
+    
+    @with_parse_err_handler
     def handle_yyyy_mm_fmt(delimeter):
         split = date_str.split(delimeter)
         if len(split) == 2:
@@ -43,6 +55,8 @@ def determine_if_expired(date_str):
                 if curr_date > date:
                     return PRODUCT_HAS_EXPIRED_MSG
         return None
+    
+    @with_parse_err_handler
     def handle_yyyy_mmm_dd_fmt(delimeter):
         split = date_str.split(delimeter)
         if len(split) == 3:
@@ -54,6 +68,8 @@ def determine_if_expired(date_str):
                 if curr_date > date:
                     return PRODUCT_HAS_EXPIRED_MSG
         return None
+
+    @with_parse_err_handler
     def handle_yyyy_mmm_fmt(delimeter):
         split = date_str.split(delimeter)
 
@@ -64,6 +80,8 @@ def determine_if_expired(date_str):
                 if curr_date > date:
                     return PRODUCT_HAS_EXPIRED_MSG
         return None
+    
+    @with_parse_err_handler
     def handle_yyyy_mmm_dd_spaces_fmt():
         if len(date_str) == 9:
             year, month, day = date_str[0:4], date_str[4:7],\
@@ -73,6 +91,8 @@ def determine_if_expired(date_str):
                 if curr_date > date:
                     return PRODUCT_HAS_EXPIRED_MSG
         return None
+    
+    @with_parse_err_handler
     def handle_yyyy_mmm_spaces_fmt():
         if len(date_str) == 7:
             year, month = date_str[0:4], date_str[4:7]
@@ -81,6 +101,8 @@ def determine_if_expired(date_str):
                 if curr_date > date:
                     return PRODUCT_HAS_EXPIRED_MSG
         return None
+
+    @with_parse_err_handler
     def handle_dd_mmm_yyyy_spaces_fmt():
         if len(date_str) == 9:
             day, month, year = date_str[0:2], date_str[2:5],\
@@ -90,6 +112,8 @@ def determine_if_expired(date_str):
                 if curr_date > date:
                     return PRODUCT_HAS_EXPIRED_MSG
         return None
+
+    @with_parse_err_handler
     def handle_mmm_dd_yy_spaces_fmt():
         if len(date_str) == 7:
             month, day, year = date_str[0:3],\
@@ -99,19 +123,64 @@ def determine_if_expired(date_str):
                 curr_year_in_2_digits = abs(curr_date.year) % 100
                 if curr_year_in_2_digits > year:
                     return PRODUCT_HAS_EXPIRED_MSG
+                if curr_year_in_2_digits < year:
+                    return None
                 date = datetime(year=curr_date.year, month=month_to_num_table[month], day=int(day))
                 if curr_date > date:
                     return PRODUCT_HAS_EXPIRED_MSG
         return None
+
+    @with_parse_err_handler
+    def handle_mm_dd_yy_spaces_fmt():
+        if len(date_str) == 6:
+            month, day, year = date_str[0:2], \
+                date_str[2:4],\
+                date_str[4:6]
+            if month.isdigit() and year.isdigit() and day.isdigit():
+                curr_year_in_2_digits = abs(curr_date.year) % 100
+                if curr_year_in_2_digits > year:
+                    return PRODUCT_HAS_EXPIRED_MSG
+                if curr_year_in_2_digits < year:
+                    return None
+                date = datetime(year=curr_date.year, month=int(month), day=int(day))
+                if curr_date > date:
+                    return PRODUCT_HAS_EXPIRED_MSG
+        return None
+
+    @with_parse_err_handler
+    def handle_mm_dd_yy_slash_fmt():
+        split = date_str.split('/')
+        if len(split) == 3:
+            month, day, year = split[0], split[1], split[2]
+            if all(len(item) == 2 for item in split):
+                if month.isdigit() and year.isdigit() and day.isdigit():
+                    curr_year_in_2_digits = abs(curr_date.year) % 10
+                    if curr_year_in_2_digits > year:
+                        return PRODUCT_HAS_EXPIRED_MSG
+                    if curr_year_in_2_digits < year:
+                        return None
+                    date = datetime(year=curr_date.year, month=int(month), day=int(day))
+                    if curr_date > date:
+                        return PRODUCT_HAS_EXPIRED_MSG
+        return None
+
     # match mm/dd/yyyy, mm-dd-yyyy format
-    format_handled = [handle_mm_dd_yyyy_fmt('/'),
-        handle_mm_dd_yyyy_fmt('-'), handle_yyyy_mm_fmt('-'),
-        handle_yyyy_mmm_dd_fmt('-'),
-        handle_yyyy_mmm_fmt('-'),
-        handle_yyyy_mmm_dd_spaces_fmt(),
-        handle_yyyy_mmm_spaces_fmt(),
+    format_handled = [
+        handle_mm_dd_yyyy_fmt('/'),
+        handle_mm_dd_yyyy_fmt('-'),
         handle_dd_mmm_yyyy_spaces_fmt(),
-        handle_mmm_dd_yy_spaces_fmt()]
+        handle_yyyy_mmm_dd_fmt('-'),
+        handle_yyyy_mmm_dd_fmt('/'),
+        handle_yyyy_mmm_dd_spaces_fmt(),
+        handle_mmm_dd_yy_spaces_fmt(),
+        handle_yyyy_mmm_fmt('-'),
+        handle_yyyy_mmm_spaces_fmt(),
+        handle_mmm_dd_yy_spaces_fmt(),
+        handle_mm_dd_yy_spaces_fmt(),
+        handle_mm_dd_yy_slash_fmt(),
+        handle_yyyy_mm_fmt('/'),
+        handle_yyyy_mm_fmt('-'),
+    ]
     for msg in format_handled:
         if msg is not None:
             return msg
@@ -121,9 +190,10 @@ def determine_if_expired(date_str):
 def match_best_date_format(output_label):
     date_fmt_regexs_and_matches = [
         # labels recommended format by FDA for drug labels
-        ('mm/dd/yyyy',re.compile(r'\d{2}\\\d{2}\\\d{4}')),
+        ('mm/dd/yyyy',re.compile(r'\d{2}\/\d{2}\/\d{4}')),
         ('mm-dd-yyyy', re.compile(r'\d{2}\-\d{2}\-\d{4}')),
-        ('yyyy-mm', re.compile(r'\d{4}\-\d{2}'), []),
+        ('yyyy-mm', re.compile(r'\d{4}\-\d{2}')),
+        ('yyyy/mm', re.compile(r'\d{4}\\\d{2}')),
         ('yyyy-mmm-dd', re.compile(r"""\d{4}\-JAN\-\d{2}|
         \d{4}\-FEB\-\d{2}|
         \d{4}\-MAR\-\d{2}|
@@ -136,6 +206,30 @@ def match_best_date_format(output_label):
         \d{4}\-OCT\-\d{2}|
         \d{4}\-NOV\-\d{2}|
         \d{4}\-DEC\-\d{2}""")),
+        ('yyyy/mmm/dd', re.compile(r"""\d{4}\/JAN\/\d{2}|
+        \d{4}\/FEB\/\d{2}|
+        \d{4}\/MAR\/\d{2}|
+        \d{4}\/APR\/\d{2}|
+        \d{4}\/MAY\/\d{2}|
+        \d{4}\/JUN\/\d{2}|
+        \d{4}\/JUL\/\d{2}|
+        \d{4}\/AUG\/\d{2}|
+        \d{4}\/SEP\/\d{2}|
+        \d{4}\/OCT\/\d{2}|
+        \d{4}\/NOV\/\d{2}|
+        \d{4}\/DEC\/\d{2}""")),
+        ('yyyy/mmm', re.compile(r"""\d{4}\/JAN|
+        \d{4}\/FEB|
+        \d{4}\/MAR|
+        \d{4}\/APR|
+        \d{4}\/MAY|
+        \d{4}\/JUN|
+        \d{4}\/JUL|
+        \d{4}\/AUG|
+        \d{4}\/SEP|
+        \d{4}\/OCT|
+        \d{4}\/NOV|
+        \d{4}\/DEC""")),
         ('yyyy-mmm', re.compile(r"""\d{4}\-JAN|
         \d{4}\-FEB|
         \d{4}\-MAR|
@@ -196,7 +290,9 @@ def match_best_date_format(output_label):
         SEP\d{2}\d{2}|
         OCT\d{2}\d{2}|
         NOV\d{2}\d{2}|
-        DEC\d{2}\d{2}"""))
+        DEC\d{2}\d{2}""")),
+        ('mm/dd/yy', re.compile(r'\d{2}\/d{2}\/d{2}')),
+        ('mm dd yy', re.compile(r''))
     ]
     date_matches = []
     for item in date_fmt_regexs_and_matches:
